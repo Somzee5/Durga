@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
       await login(credentials);
       
       Alert.alert(
-        '🕉️ Welcome Back!',
+        '  Welcome Back!',
         'You are now protected by Durga\'s divine strength.',
         [{ text: 'OK' }]
       );
@@ -120,7 +120,7 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.content}>
         <Card style={styles.loginCard} elevation={4}>
           <Card.Content style={styles.cardContent}>
-            <Text style={styles.title}>🕉️ Welcome Back</Text>
+            <Text style={styles.title}>  Welcome Back</Text>
             <Text style={styles.subtitle}>
               Sign in to access Durga's divine protection
             </Text>
@@ -174,7 +174,7 @@ const LoginScreen = ({ navigation }) => {
               {isLoading ? (
                 <ActivityIndicator size="small" color={theme.colors.surface} />
               ) : (
-                '🕉️ Sign In with Durga'
+                '  Sign In with Durga'
               )}
             </Button>
             

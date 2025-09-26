@@ -77,7 +77,7 @@ router.post('/login', [
     );
 
     res.json({
-      message: '🕉️ Welcome back! Durga\'s protection is with you',
+      message: '  Welcome back! Durga\'s protection is with you',
       user: user.getSafeData(),
       token,
       code: 'LOGIN_SUCCESS'
@@ -172,7 +172,7 @@ router.post('/change-password', auth, [
     await user.save();
 
     res.json({
-      message: '🕉️ Password changed successfully',
+      message: '  Password changed successfully',
       code: 'PASSWORD_CHANGED'
     });
 
@@ -194,7 +194,7 @@ router.post('/logout', auth, async (req, res) => {
     // In a more sophisticated setup, you might want to blacklist the token
     // For now, we'll just return a success message
     res.json({
-      message: '🕉️ Logged out successfully. Durga\'s protection remains with you.',
+      message: '  Logged out successfully. Durga\'s protection remains with you.',
       code: 'LOGOUT_SUCCESS'
     });
 
@@ -234,7 +234,7 @@ router.post('/forgot-password', [
     if (!user) {
       // Don't reveal if email exists or not for security
       return res.json({
-        message: '🕉️ If the email exists, a password reset link has been sent',
+        message: '  If the email exists, a password reset link has been sent',
         code: 'RESET_EMAIL_SENT'
       });
     }
@@ -246,7 +246,7 @@ router.post('/forgot-password', [
     
     // For now, we'll just return a success message
     res.json({
-      message: '🕉️ If the email exists, a password reset link has been sent',
+      message: '  If the email exists, a password reset link has been sent',
       code: 'RESET_EMAIL_SENT'
     });
 

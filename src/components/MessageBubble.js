@@ -50,7 +50,7 @@ const MessageBubble = ({ message }) => {
                     iconColor={theme.colors.emergency}
                     style={styles.emergencyIcon}
                   />
-                  <Text style={styles.emergencyLabel}>🛡️ Durga Protection Mode</Text>
+                  <Text style={styles.emergencyLabel}>Police Alert Mode</Text>
                 </View>
               </LinearGradient>
             )}
@@ -69,9 +69,6 @@ const MessageBubble = ({ message }) => {
                   minute: '2-digit' 
                 })}
               </Text>
-              <View style={styles.durgaIndicator}>
-                <Text style={styles.durgaSymbol}>🕉️</Text>
-              </View>
             </View>
           </View>
         </Surface>
@@ -177,16 +174,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: theme.colors.placeholder,
     fontWeight: '500',
-  },
-  durgaIndicator: {
-    backgroundColor: theme.colors.durgaGold,
-    borderRadius: 12,
-    paddingHorizontal: theme.durga.spacing.sm,
-    paddingVertical: 2,
-  },
-  durgaSymbol: {
-    fontSize: 12,
-    color: theme.colors.durgaBrown,
   },
 });
 

@@ -6,7 +6,7 @@ const initialState = {
   messages: [
     {
       id: '1',
-      text: '🕉️ Namaste! I am Durga, your divine safety companion. I am here to protect, guide, and support you with divine strength and wisdom. How may I assist you today?',
+      text: ' Namaste! I am Durga, your divine safety companion. I am here to protect, guide, and support you with divine strength and wisdom. How may I assist you today?',
       isUser: false,
       timestamp: new Date(),
       isEmergency: false,

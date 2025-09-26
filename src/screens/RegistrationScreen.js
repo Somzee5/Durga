@@ -175,7 +175,7 @@ const RegistrationScreen = ({ navigation }) => {
       await register(registrationData);
       
       Alert.alert(
-        '🕉️ Welcome to Durga!',
+        '  Welcome to Durga!',
         'Registration successful! You are now protected by divine strength.',
         [{ text: 'OK' }]
       );
@@ -212,7 +212,7 @@ const RegistrationScreen = ({ navigation }) => {
       >
         <Card style={styles.registrationCard} elevation={4}>
           <Card.Content style={styles.cardContent}>
-            <Text style={styles.title}>🕉️ Join Durga's Protection</Text>
+            <Text style={styles.title}>  Join Durga's Protection</Text>
             <Text style={styles.subtitle}>
               Register to access divine safety guidance and support
             </Text>
@@ -375,7 +375,7 @@ const RegistrationScreen = ({ navigation }) => {
               {isLoading ? (
                 <ActivityIndicator size="small" color={theme.colors.surface} />
               ) : (
-                '🕉️ Register with Durga'
+                '  Register with Durga'
               )}
             </Button>
             

@@ -154,8 +154,8 @@ const ChatScreen = () => {
 
   const handleLogout = () => {
     Alert.alert(
-      '🕉️ Logout',
-      'Are you sure you want to logout? Durga\'s protection will remain with you.',
+      'Logout',
+      'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
         { 
@@ -213,10 +213,10 @@ const ChatScreen = () => {
         ) : (
           <View style={styles.welcomeContainer}>
             <Text style={styles.welcomeText}>
-              🕉️ Welcome to Durga's Divine Protection 🕉️
+              Welcome to the Safety Companion
             </Text>
             <Text style={styles.welcomeSubtext}>
-              Start a conversation to receive divine guidance and safety support
+              Start a conversation to receive helpful safety guidance and support
             </Text>
           </View>
         )}
@@ -224,7 +224,7 @@ const ChatScreen = () => {
         {isLoading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="small" color={theme.colors.durgaRed} />
-            <Text style={styles.loadingText}>🕉️ Durga is thinking...</Text>
+            <Text style={styles.loadingText}>Generating response...</Text>
           </View>
         )}
       </ScrollView>

@@ -23,7 +23,7 @@ const SendLocationButton = () => {
       
       const { latitude, longitude } = location.coords;
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-      const message = `🕉️ Emergency Location Alert 🕉️\n\nMy current location: ${mapsUrl}\n\nLatitude: ${latitude}\nLongitude: ${longitude}\n\nPlease help me!`;
+      const message = `  Emergency Location Alert  \n\nMy current location: ${mapsUrl}\n\nLatitude: ${latitude}\nLongitude: ${longitude}\n\nPlease help me!`;
 
       // Try WhatsApp first
       const whatsappUrl = `whatsapp://send?phone=91${CONTACT_NUMBER}&text=${encodeURIComponent(message)}`;
@@ -32,7 +32,7 @@ const SendLocationButton = () => {
       if (canOpen) {
         await Linking.openURL(whatsappUrl);
         Alert.alert(
-          '🕉️ Location Sent!',
+          '  Location Sent!',
           'Your location has been shared via WhatsApp. Help is on the way!',
           [{ text: 'OK' }]
         );
@@ -44,7 +44,7 @@ const SendLocationButton = () => {
         
         await Linking.openURL(smsUrl);
         Alert.alert(
-          '🕉️ Location Sent!',
+          '  Location Sent!',
           'Your location has been shared via SMS. Help is on the way!',
           [{ text: 'OK' }]
         );

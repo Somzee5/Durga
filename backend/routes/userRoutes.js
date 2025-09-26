@@ -124,7 +124,7 @@ router.post('/register', validateUserRegistration, async (req, res) => {
     const token = user.generateAuthToken();
 
     res.status(201).json({
-      message: '🕉️ User registered successfully with Durga\'s protection',
+      message: '  User registered successfully with Durga\'s protection',
       user: user.getSafeData(),
       token,
       code: 'REGISTRATION_SUCCESS'
@@ -218,7 +218,7 @@ router.put('/profile', auth, [
     }
 
     res.json({
-      message: '🕉️ Profile updated successfully',
+      message: '  Profile updated successfully',
       user: user.getSafeData(),
       code: 'UPDATE_SUCCESS'
     });
@@ -309,7 +309,7 @@ router.get('/emergency-contacts', auth, async (req, res) => {
     }
 
     res.json({
-      message: '🕉️ Emergency contacts retrieved successfully',
+      message: '  Emergency contacts retrieved successfully',
       emergencyContacts: user.emergencyContacts,
       code: 'CONTACTS_SUCCESS'
     });
@@ -390,7 +390,7 @@ router.post('/safety-stats', auth, [
     ).select('safetyStats');
 
     res.json({
-      message: '🕉️ Safety statistics updated',
+      message: '  Safety statistics updated',
       safetyStats: user.safetyStats,
       code: 'STATS_UPDATED'
     });

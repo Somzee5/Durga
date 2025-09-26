@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { IconButton, Surface } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme/theme';
@@ -16,11 +16,10 @@ const DurgaHeader = ({ onLogout }) => {
         <View style={styles.headerContent}>
           <View style={styles.logoContainer}>
             <View style={styles.logoCircle}>
-              <IconButton
-                icon="shield-check"
-                size={32}
-                iconColor={theme.colors.durgaGold}
-                style={styles.logoIcon}
+              <Image
+                source={require('../../assets/police_cap.png')}
+                style={styles.logoImage}
+                resizeMode="contain"
               />
             </View>
             <View style={styles.titleContainer}>
@@ -78,6 +77,10 @@ const styles = StyleSheet.create({
   },
   logoIcon: {
     margin: 0,
+  },
+  logoImage: {
+    width: 36,
+    height: 36,
   },
   titleContainer: {
     flex: 1,

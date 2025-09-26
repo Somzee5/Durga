@@ -60,7 +60,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/durga-saf
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
-    message: '🕉️ Durga Safety Backend is running',
+    message: '  Durga Safety Backend is running',
     timestamp: new Date().toISOString(),
     version: process.env.API_VERSION || 'v1'
   });
@@ -69,7 +69,7 @@ app.get('/health', (req, res) => {
 // Test endpoint for mobile connectivity
 app.get('/test', (req, res) => {
   res.status(200).json({
-    message: '🕉️ Backend is accessible from mobile device!',
+    message: '  Backend is accessible from mobile device!',
     clientIP: req.ip,
     userAgent: req.get('User-Agent'),
     timestamp: new Date().toISOString()
@@ -84,7 +84,7 @@ app.use('/api/v1/alerts', alertRoutes);
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
-    message: '🕉️ Welcome to Durga Women Safety Companion API',
+    message: '  Welcome to Durga Women Safety Companion API',
     version: process.env.API_VERSION || 'v1',
     endpoints: {
       health: '/health',
@@ -133,7 +133,7 @@ app.use('*', (req, res) => {
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🕉️ Durga Safety Backend running on port ${PORT}`);
+  console.log(`  Durga Safety Backend running on port ${PORT}`);
   console.log(`🛡️ Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📱 API Base URL: http://localhost:${PORT}/api/v1`);
   console.log(`🌐 Network Access: http://0.0.0.0:${PORT}/api/v1`);

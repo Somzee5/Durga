@@ -1,6 +1,6 @@
 # Durga Backend API
 
-🕉️ Backend API for Durga Women Safety Companion App
+  Backend API for Durga Women Safety Companion App
 
 ## 🚀 Quick Start
 
@@ -176,7 +176,7 @@ backend/
 **Success Response:**
 ```json
 {
-  "message": "🕉️ Operation successful",
+  "message": "  Operation successful",
   "data": { ... },
   "code": "SUCCESS_CODE"
 }
@@ -244,4 +244,4 @@ This project is designed for public safety and government use. Please ensure com
 
 ---
 
-🕉️ **Durga's Protection** - Empowering women through technology and divine strength.
+  **Durga's Protection** - Empowering women through technology and divine strength.
