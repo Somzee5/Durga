@@ -170,6 +170,37 @@ class ApiService {
   async testConnection() {
     return this.request('/test');
   }
+
+  // SOS: send alert (server relays via SMS/MMS)
+  async sendSosAlert(payload) {
+    return this.request('/alerts/sos', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  }
+
+  // SOS: upload audio (multipart) -> returns audioUrl
+  async uploadSosAudio(fileUri) {
+    const formData = new FormData();
+    formData.append('audio', {
+      uri: fileUri,
+      name: 'sos_audio.m4a',
+      type: 'audio/m4a',
+    });
+    const url = `${this.baseURL}/alerts/sos-audio`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || `HTTP error! status: ${response.status}`);
+    }
+    return data;
+  }
 }
 
 // Create and export singleton instance
@@ -192,5 +223,7 @@ export const {
   forgotPassword,
   healthCheck,
   testConnection,
+  sendSosAlert,
+  uploadSosAudio,
   setToken
 } = apiService;

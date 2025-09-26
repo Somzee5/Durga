@@ -9,6 +9,7 @@ require('dotenv').config();
 // Import routes
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
+const alertRoutes = require('./routes/alertRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -78,6 +79,7 @@ app.get('/test', (req, res) => {
 // API routes
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/alerts', alertRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -136,6 +138,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📱 API Base URL: http://localhost:${PORT}/api/v1`);
   console.log(`🌐 Network Access: http://0.0.0.0:${PORT}/api/v1`);
   console.log(`📱 Mobile Access: http://10.253.87.127:${PORT}/api/v1`);
+  console.log(`🚨 Alerts: POST /api/v1/alerts/sos, /api/v1/alerts/sos-audio`);
 });
 
 module.exports = app;

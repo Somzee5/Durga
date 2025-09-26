@@ -7,6 +7,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ChatProvider } from './src/context/ChatContext';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import ChatScreen from './src/screens/ChatScreen';
+import OfflineSafetyGuide from './src/screens/OfflineSafetyGuide';
+import * as Network from 'expo-network';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import AuthDebug from './src/components/AuthDebug';
@@ -17,6 +19,27 @@ const Stack = createStackNavigator();
 // Navigation component that handles authentication state
 function AppNavigator() {
   const { isAuthenticated, isLoading } = useAuth();
+  const [isOffline, setIsOffline] = React.useState(false);
+
+  React.useEffect(() => {
+    let mounted = true;
+    const check = async () => {
+      try {
+        const state = await Network.getNetworkStateAsync();
+        if (mounted) setIsOffline(!state.isConnected || !state.isInternetReachable);
+      } catch {}
+    };
+    check();
+    const interval = setInterval(check, 5000);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // For testing: Add a way to manually toggle offline mode
+  // You can temporarily set this to true to test offline functionality
+  // const [isOffline, setIsOffline] = React.useState(true); // Uncomment this line to test offline mode
 
   if (isLoading) {
     return (
@@ -38,8 +61,11 @@ function AppNavigator() {
           }}
         >
           {isAuthenticated ? (
-            // User is authenticated, show Chat screen
-            <Stack.Screen name="Chat" component={ChatScreen} />
+            isOffline ? (
+              <Stack.Screen name="OfflineGuide" component={OfflineSafetyGuide} />
+            ) : (
+              <Stack.Screen name="Chat" component={ChatScreen} />
+            )
           ) : (
             // User is not authenticated, show auth screens
             <>

@@ -4,6 +4,7 @@ import { NativeEventEmitter, NativeModules, Platform, Alert, Linking } from 'rea
 import { Audio } from 'expo-av';
 import * as Location from 'expo-location';
 import RecordingServiceNative from '../services/RecordingServiceNativeModule';
+import { sendSosAlert, uploadSosAudio } from '../services/apiService';
 let expoRecordingRef = null;
 
 /**
@@ -79,8 +80,8 @@ export default function useTriplePressRecorder({ chunkPathPrefix = null } = {}) 
       // Start recording immediately
       await startRecording();
       
-      // Get location and send emergency alert
-      await sendEmergencyAlert();
+      // Get location and send emergency alert via backend (auto-send)
+      await sendEmergencyAlert(true);
       
       // Show SOS confirmation
       Alert.alert(
@@ -106,10 +107,11 @@ export default function useTriplePressRecorder({ chunkPathPrefix = null } = {}) 
   }
 
   // Send emergency alert with location
-  async function sendEmergencyAlert() {
+  async function sendEmergencyAlert(useBackend = false) {
     try {
       const hasLocationPermission = await ensureLocationPermission();
       let locationData = '';
+      let lat = null, lng = null;
       
       if (hasLocationPermission) {
         try {
@@ -117,6 +119,7 @@ export default function useTriplePressRecorder({ chunkPathPrefix = null } = {}) 
             accuracy: Location.Accuracy.High,
           });
           const { latitude, longitude } = location.coords;
+          lat = latitude; lng = longitude;
           const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
           locationData = `\n\n📍 EMERGENCY LOCATION:\n${mapsUrl}\nLatitude: ${latitude}\nLongitude: ${longitude}`;
         } catch (locationError) {
@@ -126,6 +129,38 @@ export default function useTriplePressRecorder({ chunkPathPrefix = null } = {}) 
       }
 
       const emergencyMessage = `🚨 SOS EMERGENCY ALERT 🚨\n\nA woman is in immediate danger and needs urgent help!\n\nThis is an automated emergency alert from Durga Safety App.\n\nTime: ${new Date().toLocaleString()}${locationData}\n\nAudio recording is being captured for evidence.\n\nPlease respond immediately!`;
+
+      if (useBackend) {
+        try {
+          // If we have a recording in progress, stop and upload to include audio
+          let audioUrl = null;
+          if (expoRecordingRef) {
+            await expoRecordingRef.stopAndUnloadAsync();
+            const uri = expoRecordingRef.getURI();
+            expoRecordingRef = null;
+            if (uri) {
+              try {
+                const up = await uploadSosAudio(uri);
+                audioUrl = up.audioUrl || null;
+              } catch (e) {
+                console.warn('Audio upload failed:', e);
+              }
+            }
+          }
+
+          await sendSosAlert({
+            phone: '919021530516',
+            message: emergencyMessage.replace(/📍/g, 'Location:'),
+            lat,
+            lng,
+            audioUrl,
+          });
+          console.log('SOS dispatched via backend');
+          return;
+        } catch (e) {
+          console.warn('Backend SOS dispatch failed, falling back to client share', e);
+        }
+      }
 
       // Try WhatsApp first
       const whatsappUrl = `whatsapp://send?phone=91${EMERGENCY_CONTACT}&text=${encodeURIComponent(emergencyMessage)}`;
