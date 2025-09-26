@@ -62,7 +62,6 @@ const SendLocationButton = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={sendLocation}>
-        <Text style={styles.buttonIcon}>📍</Text>
         <Text style={styles.buttonText}>Send My Location</Text>
       </TouchableOpacity>
     </View>

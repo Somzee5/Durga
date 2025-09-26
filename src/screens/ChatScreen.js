@@ -15,12 +15,12 @@ import {
   Divider,
   ActivityIndicator,
   Surface,
+  IconButton,
 } from 'react-native-paper';
 import { useChat } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
 import { sendMessageToAI, getFallbackResponse, detectSafetyIntent } from '../services/aiService';
 import MessageBubble from '../components/MessageBubble';
-import SafetyDisclaimer from '../components/SafetyDisclaimer';
 import DurgaHeader from '../components/DurgaHeader';
 import SendLocationButton from '../components/SendLocationButton';
 import SOSStatus from '../components/SOSStatus';
@@ -153,37 +153,25 @@ const ChatScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View onTouchEnd={handleHeaderTripleTap}>
-        <DurgaHeader />
+        <DurgaHeader onLogout={handleLogout} />
       </View>
       
-      {/* User info and logout button */}
+      {/* User info (no emojis) */}
       <Surface style={styles.userInfoContainer} elevation={1}>
         <View style={styles.userInfoRow}>
           <View style={styles.userInfo}>
             <Text style={styles.welcomeUser}>
-              🕉️ Welcome, {user?.name || 'User'} 🕉️
+              Welcome, {user?.name || 'User'}
             </Text>
             <Text style={styles.userEmail}>
               {user?.email || ''}
             </Text>
           </View>
-          <Button
-            mode="outlined"
-            onPress={handleLogout}
-            style={styles.logoutButton}
-            textColor={theme.colors.durgaRed}
-            buttonColor="transparent"
-            icon="logout"
-          >
-            Logout
-          </Button>
         </View>
       </Surface>
       
       {/* SOS Status */}
       <SOSStatus isSOSActive={isSOSActive} isRecording={isRecording} />
-      
-      <SafetyDisclaimer />
       
       <ScrollView 
         ref={scrollViewRef}
@@ -245,37 +233,22 @@ const ChatScreen = () => {
           <Text style={styles.footerText}>
             If you're in immediate danger, call emergency services
           </Text>
-          
-          <Button
-            mode="outlined"
-            onPress={handleEmergencyAlert}
-            style={styles.emergencyButton}
-            textColor="#d32f2f"
-            buttonColor="transparent"
-          >
-            Emergency Help
-          </Button>
         </View>
       </Surface>
       
       {/* Location Button - Outside Surface for better visibility */}
       <SendLocationButton />
       
-      {/* Manual SOS Test Button (for development) */}
-      <View style={styles.sosTestContainer}>
-        <Button
-          mode="contained"
-          onPress={activateSOS}
-          style={styles.sosTestButton}
-          textColor="#fff"
-          buttonColor={theme.colors.emergency}
-          icon="alert"
-        >
-          🚨 Test SOS (Triple Press Power Button)
-        </Button>
-        <Text style={styles.sosTestText}>
-          In emergency: Press power button 3 times quickly
-        </Text>
+      {/* Floating Call Button */}
+      <View style={styles.fabContainer} pointerEvents="box-none">
+        <IconButton
+          icon="phone"
+          size={28}
+          onPress={handleEmergencyAlert}
+          iconColor="#fff"
+          style={styles.fab}
+          accessibilityLabel="Emergency Call"
+        />
       </View>
     </KeyboardAvoidingView>
   );
@@ -378,6 +351,23 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.emergency,
     borderRadius: theme.durga.borderRadius,
     borderWidth: 2,
+  },
+  emergencyCallButton: {
+    borderRadius: theme.durga.borderRadius,
+    paddingVertical: 0,
+    minWidth: 100,
+    alignSelf: 'center',
+  },
+  fabContainer: {
+    position: 'absolute',
+    right: theme.durga.spacing.md,
+    bottom: theme.durga.spacing.xl,
+  },
+  fab: {
+    backgroundColor: theme.colors.emergency,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
   },
   userInfoContainer: {
     backgroundColor: theme.colors.surface,

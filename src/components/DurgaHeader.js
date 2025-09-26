@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { Card, IconButton, Surface } from 'react-native-paper';
+import { IconButton, Surface } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme/theme';
 
-const DurgaHeader = () => {
+const DurgaHeader = ({ onLogout }) => {
   return (
     <Surface style={styles.headerContainer} elevation={4}>
       <LinearGradient
@@ -28,18 +28,19 @@ const DurgaHeader = () => {
               <Text style={styles.appSubtitle}>Women Safety Companion</Text>
             </View>
           </View>
-          
-          <View style={styles.statusContainer}>
-            <View style={styles.statusDot} />
-            <Text style={styles.statusText}>Always Here</Text>
+
+          <View style={styles.actionsRow}>
+            <IconButton
+              icon="logout"
+              size={22}
+              iconColor={theme.colors.surface}
+              onPress={onLogout}
+              style={styles.logoutIcon}
+              accessibilityLabel="Logout"
+            />
           </View>
         </View>
-        
-        <View style={styles.headerFooter}>
-          <Text style={styles.tagline}>
-            🕉️ Your Divine Protection & Support 🕉️
-          </Text>
-        </View>
+
       </LinearGradient>
     </Surface>
   );
@@ -97,38 +98,14 @@ const styles = StyleSheet.create({
     marginTop: 2,
     letterSpacing: 0.5,
   },
-  statusContainer: {
+  actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: theme.durga.spacing.sm,
-    paddingVertical: theme.durga.spacing.xs,
-    borderRadius: 20,
   },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: theme.colors.success,
-    marginRight: theme.durga.spacing.xs,
-  },
-  statusText: {
-    fontSize: 12,
-    color: theme.colors.surface,
-    fontWeight: '600',
-  },
-  headerFooter: {
-    alignItems: 'center',
-    paddingTop: theme.durga.spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  tagline: {
-    fontSize: 16,
-    color: theme.colors.durgaLight,
-    fontWeight: '500',
-    textAlign: 'center',
-    letterSpacing: 0.5,
+  logoutIcon: {
+    margin: 0,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 18,
   },
 });
 

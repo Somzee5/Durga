@@ -16,16 +16,16 @@ const SafetyDisclaimer = () => {
               style={styles.icon}
             />
           </View>
-          <Text style={styles.title}>🛡️ Durga Protection</Text>
+          <Text style={styles.title}>Durga Protection</Text>
         </View>
         
         <Text style={styles.disclaimerText}>
-          Divine companion for emotional support and safety guidance.
+          Companion for emotional support and safety guidance.
         </Text>
         
         <View style={styles.importantNote}>
           <Text style={styles.noteText}>
-            <Text style={styles.bold}>🚨 Emergency:</Text> Call 100/112 if in immediate danger.
+            Emergency: Call 100/112 if in immediate danger.
           </Text>
         </View>
       </Card.Content>
