@@ -6,6 +6,8 @@ import {
   Platform,
   ScrollView,
   Alert,
+  Animated,
+  Linking,
 } from 'react-native';
 import {
   Text,
@@ -38,6 +40,7 @@ const ChatScreen = () => {
   // SOS functionality
   const { isRecording, isSOSActive, activateSOS, openAccessibilitySettings } = useTriplePressRecorder();
   const tapMetaRef = useRef({ count: 0, lastTs: 0 });
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     // Auto-scroll to bottom when new messages arrive
@@ -45,6 +48,26 @@ const ChatScreen = () => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
   }, [messages]);
+
+  // Pulsing animation for emergency button
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.2,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, [pulseAnim]);
 
   // Shake-to-activate SOS (Expo-friendly trigger)
   // useEffect(() => {
@@ -113,17 +136,20 @@ const ChatScreen = () => {
   };
 
   const handleEmergencyAlert = () => {
-    Alert.alert(
-      'Emergency Contact',
-      'If you\'re in immediate danger, please call emergency services:\n\n• Police: 100\n• Women Helpline: 1091\n• National Emergency: 112',
-      [
-        { text: 'OK', style: 'default' },
-        { text: 'Call Emergency', style: 'destructive', onPress: () => {
-          // In a real app, this would open the phone dialer
-          console.log('Emergency call initiated');
-        }}
-      ]
-    );
+    // Direct emergency call without any confirmation
+    const emergencyNumber = '9021530316';
+    console.log('Emergency call initiated to:', emergencyNumber);
+    
+    // Open phone dialer directly
+    Linking.openURL(`tel:${emergencyNumber}`).catch(err => {
+      console.error('Failed to open phone dialer:', err);
+      // Fallback: show alert if phone dialer fails
+      Alert.alert(
+        'Emergency Call',
+        `Emergency number: ${emergencyNumber}\n\nPlease call this number immediately if you're in danger.`,
+        [{ text: 'OK' }]
+      );
+    });
   };
 
   const handleLogout = () => {
@@ -240,16 +266,18 @@ const ChatScreen = () => {
       {/* Location Button - Outside Surface for better visibility */}
       <SendLocationButton />
       
-      {/* Floating Call Button */}
+      {/* Floating Emergency Call Button */}
       <View style={styles.fabContainer} pointerEvents="box-none">
-        <IconButton
-          icon="phone"
-          size={28}
-          onPress={handleEmergencyAlert}
-          iconColor="#fff"
-          style={styles.fab}
-          accessibilityLabel="Emergency Call"
-        />
+        <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+          <IconButton
+            icon="phone-alert"
+            size={32}
+            onPress={handleEmergencyAlert}
+            iconColor="#fff"
+            style={styles.fab}
+            accessibilityLabel="Emergency Call"
+          />
+        </Animated.View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -365,13 +393,22 @@ const styles = StyleSheet.create({
   fabContainer: {
     position: 'absolute',
     right: theme.durga.spacing.md,
-    bottom: theme.durga.spacing.xl,
+    top: theme.durga.spacing.xl,
+    zIndex: 1000,
   },
   fab: {
     backgroundColor: theme.colors.emergency,
     borderRadius: 28,
     width: 56,
     height: 56,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   userInfoContainer: {
     backgroundColor: theme.colors.surface,
