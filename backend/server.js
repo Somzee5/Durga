@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -42,6 +43,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Logging middleware
 app.use(morgan('combined'));
+
+// Static files for uploaded media (audio)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/durga-safety', {

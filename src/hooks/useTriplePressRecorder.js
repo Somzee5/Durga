@@ -1,6 +1,6 @@
 // useTriplePressRecorder.js
 import { useEffect, useRef, useState } from 'react';
-import { NativeEventEmitter, NativeModules, Platform, Alert, Linking } from 'react-native';
+import { NativeEventEmitter, NativeModules, Platform, Alert, Linking, Share } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Location from 'expo-location';
 import RecordingServiceNative from '../services/RecordingServiceNativeModule';
@@ -156,6 +156,24 @@ export default function useTriplePressRecorder({ chunkPathPrefix = null } = {}) 
             audioUrl,
           });
           console.log('SOS dispatched via backend');
+          // If audio uploaded, offer to share the link immediately
+          if (audioUrl) {
+            try {
+              await Share.share({
+                message: `Emergency audio evidence: ${audioUrl}`,
+                url: audioUrl,
+                title: 'Emergency Audio Recording',
+              });
+              Alert.alert(
+                'Audio Uploaded',
+                `Copy/share this link to your teacher:\n${audioUrl}`,
+                [{ text: 'OK' }]
+              );
+            } catch (shareErr) {
+              console.warn('Share failed:', shareErr);
+              Alert.alert('Audio Uploaded', `Link: ${audioUrl}`, [{ text: 'OK' }]);
+            }
+          }
           return;
         } catch (e) {
           console.warn('Backend SOS dispatch failed, falling back to client share', e);
