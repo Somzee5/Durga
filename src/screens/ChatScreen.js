@@ -26,6 +26,8 @@ import SendLocationButton from '../components/SendLocationButton';
 import SOSStatus from '../components/SOSStatus';
 import useTriplePressRecorder from '../hooks/useTriplePressRecorder';
 import { theme } from '../theme/theme';
+// Shake trigger temporarily disabled to avoid runtime import issues
+// import * as ExpoShake from 'expo-shake';
 
 const ChatScreen = () => {
   const [inputText, setInputText] = useState('');
@@ -35,6 +37,7 @@ const ChatScreen = () => {
   
   // SOS functionality
   const { isRecording, isSOSActive, activateSOS, openAccessibilitySettings } = useTriplePressRecorder();
+  const tapMetaRef = useRef({ count: 0, lastTs: 0 });
 
   useEffect(() => {
     // Auto-scroll to bottom when new messages arrive
@@ -42,6 +45,39 @@ const ChatScreen = () => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
   }, [messages]);
+
+  // Shake-to-activate SOS (Expo-friendly trigger)
+  // useEffect(() => {
+  //   let subscription = null;
+  //   try {
+  //     if (ExpoShake && typeof ExpoShake.addListener === 'function') {
+  //       subscription = ExpoShake.addListener(() => {
+  //         activateSOS();
+  //       });
+  //     }
+  //   } catch (e) {
+  //     console.warn('Shake listener failed to attach', e);
+  //   }
+  //   return () => {
+  //     try {
+  //       subscription && typeof subscription.remove === 'function' && subscription.remove();
+  //     } catch {}
+  //   };
+  // }, [activateSOS]);
+
+  const handleHeaderTripleTap = () => {
+    const now = Date.now();
+    const delta = now - tapMetaRef.current.lastTs;
+    if (delta > 800) {
+      tapMetaRef.current.count = 0;
+    }
+    tapMetaRef.current.count += 1;
+    tapMetaRef.current.lastTs = now;
+    if (tapMetaRef.current.count >= 3) {
+      tapMetaRef.current.count = 0;
+      activateSOS();
+    }
+  };
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
@@ -116,7 +152,9 @@ const ChatScreen = () => {
       style={styles.container} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <DurgaHeader />
+      <View onTouchEnd={handleHeaderTripleTap}>
+        <DurgaHeader />
+      </View>
       
       {/* User info and logout button */}
       <Surface style={styles.userInfoContainer} elevation={1}>
