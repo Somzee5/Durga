@@ -22,6 +22,9 @@ import { sendMessageToAI, getFallbackResponse, detectSafetyIntent } from '../ser
 import MessageBubble from '../components/MessageBubble';
 import SafetyDisclaimer from '../components/SafetyDisclaimer';
 import DurgaHeader from '../components/DurgaHeader';
+import SendLocationButton from '../components/SendLocationButton';
+import SOSStatus from '../components/SOSStatus';
+import useTriplePressRecorder from '../hooks/useTriplePressRecorder';
 import { theme } from '../theme/theme';
 
 const ChatScreen = () => {
@@ -29,6 +32,9 @@ const ChatScreen = () => {
   const { messages, isLoading, addMessage, setLoading } = useChat();
   const { logout, user } = useAuth();
   const scrollViewRef = useRef(null);
+  
+  // SOS functionality
+  const { isRecording, isSOSActive, activateSOS, openAccessibilitySettings } = useTriplePressRecorder();
 
   useEffect(() => {
     // Auto-scroll to bottom when new messages arrive
@@ -136,6 +142,9 @@ const ChatScreen = () => {
         </View>
       </Surface>
       
+      {/* SOS Status */}
+      <SOSStatus isSOSActive={isSOSActive} isRecording={isRecording} />
+      
       <SafetyDisclaimer />
       
       <ScrollView 
@@ -198,6 +207,7 @@ const ChatScreen = () => {
           <Text style={styles.footerText}>
             If you're in immediate danger, call emergency services
           </Text>
+          
           <Button
             mode="outlined"
             onPress={handleEmergencyAlert}
@@ -209,6 +219,26 @@ const ChatScreen = () => {
           </Button>
         </View>
       </Surface>
+      
+      {/* Location Button - Outside Surface for better visibility */}
+      <SendLocationButton />
+      
+      {/* Manual SOS Test Button (for development) */}
+      <View style={styles.sosTestContainer}>
+        <Button
+          mode="contained"
+          onPress={activateSOS}
+          style={styles.sosTestButton}
+          textColor="#fff"
+          buttonColor={theme.colors.emergency}
+          icon="alert"
+        >
+          🚨 Test SOS (Triple Press Power Button)
+        </Button>
+        <Text style={styles.sosTestText}>
+          In emergency: Press power button 3 times quickly
+        </Text>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -344,6 +374,23 @@ const styles = StyleSheet.create({
     borderRadius: theme.durga.borderRadius,
     borderWidth: 1,
     marginLeft: theme.durga.spacing.md,
+  },
+  sosTestContainer: {
+    alignItems: 'center',
+    marginVertical: theme.durga.spacing.sm,
+    marginHorizontal: theme.durga.spacing.md,
+  },
+  sosTestButton: {
+    borderRadius: theme.durga.borderRadius,
+    marginBottom: theme.durga.spacing.sm,
+    borderWidth: 2,
+    borderColor: '#cc0000',
+  },
+  sosTestText: {
+    fontSize: 12,
+    color: theme.colors.durgaBrown,
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
 });
 

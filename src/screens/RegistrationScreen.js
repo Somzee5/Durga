@@ -177,7 +177,7 @@ const RegistrationScreen = ({ navigation }) => {
       Alert.alert(
         '🕉️ Welcome to Durga!',
         'Registration successful! You are now protected by divine strength.',
-        [{ text: 'OK', onPress: () => navigation.navigate('Chat') }]
+        [{ text: 'OK' }]
       );
       
     } catch (error) {

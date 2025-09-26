@@ -80,7 +80,7 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert(
         '🕉️ Welcome Back!',
         'You are now protected by Durga\'s divine strength.',
-        [{ text: 'OK', onPress: () => navigation.navigate('Chat') }]
+        [{ text: 'OK' }]
       );
       
     } catch (error) {
