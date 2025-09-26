@@ -3,13 +3,13 @@ import { GEMINI_API_KEY } from '../config/apiConfig';
 
 // Alternative Gemini API URLs to try (updated for 2024)
 const GEMINI_API_URLS = [
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent',
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
   'https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro:generateContent'
 ];
 
-const GEMINI_API_URL = GEMINI_API_URLS[1]; // Use the first URL as primary
+const GEMINI_API_URL = GEMINI_API_URLS[0]; // Use the first URL as primary
 
 // Validate API key format
 const validateApiKey = (apiKey) => {
