@@ -17,6 +17,7 @@ import {
   Surface,
 } from 'react-native-paper';
 import { useChat } from '../context/ChatContext';
+import { useAuth } from '../context/AuthContext';
 import { sendMessageToAI, getFallbackResponse, detectSafetyIntent } from '../services/aiService';
 import MessageBubble from '../components/MessageBubble';
 import SafetyDisclaimer from '../components/SafetyDisclaimer';
@@ -26,6 +27,7 @@ import { theme } from '../theme/theme';
 const ChatScreen = () => {
   const [inputText, setInputText] = useState('');
   const { messages, isLoading, addMessage, setLoading } = useChat();
+  const { logout, user } = useAuth();
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
@@ -81,12 +83,59 @@ const ChatScreen = () => {
     );
   };
 
+  const handleLogout = () => {
+    Alert.alert(
+      '🕉️ Logout',
+      'Are you sure you want to logout? Durga\'s protection will remain with you.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Logout', 
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await logout();
+            } catch (error) {
+              console.error('Logout error:', error);
+              Alert.alert('Error', 'Failed to logout. Please try again.');
+            }
+          }
+        }
+      ]
+    );
+  };
+
   return (
     <KeyboardAvoidingView 
       style={styles.container} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <DurgaHeader />
+      
+      {/* User info and logout button */}
+      <Surface style={styles.userInfoContainer} elevation={1}>
+        <View style={styles.userInfoRow}>
+          <View style={styles.userInfo}>
+            <Text style={styles.welcomeUser}>
+              🕉️ Welcome, {user?.name || 'User'} 🕉️
+            </Text>
+            <Text style={styles.userEmail}>
+              {user?.email || ''}
+            </Text>
+          </View>
+          <Button
+            mode="outlined"
+            onPress={handleLogout}
+            style={styles.logoutButton}
+            textColor={theme.colors.durgaRed}
+            buttonColor="transparent"
+            icon="logout"
+          >
+            Logout
+          </Button>
+        </View>
+      </Surface>
+      
       <SafetyDisclaimer />
       
       <ScrollView 
@@ -261,6 +310,40 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.emergency,
     borderRadius: theme.durga.borderRadius,
     borderWidth: 2,
+  },
+  userInfoContainer: {
+    backgroundColor: theme.colors.surface,
+    marginHorizontal: theme.durga.spacing.md,
+    marginVertical: theme.durga.spacing.sm,
+    borderRadius: theme.durga.borderRadius,
+    ...theme.durga.shadow,
+  },
+  userInfoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: theme.durga.spacing.md,
+    paddingVertical: theme.durga.spacing.sm,
+  },
+  userInfo: {
+    flex: 1,
+  },
+  welcomeUser: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: theme.colors.durgaRed,
+    marginBottom: 2,
+  },
+  userEmail: {
+    fontSize: 12,
+    color: theme.colors.durgaBrown,
+    opacity: 0.8,
+  },
+  logoutButton: {
+    borderColor: theme.colors.durgaRed,
+    borderRadius: theme.durga.borderRadius,
+    borderWidth: 1,
+    marginLeft: theme.durga.spacing.md,
   },
 });
 
