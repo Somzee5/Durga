@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Durga - Women Safety Companion",
+    "slug": "women-safety-companion",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#f8f9fa"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.government.womensafetycompanion"
+    },
+    "android": {
+      "package": "com.government.womensafetycompanion",
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ]
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "platforms": ["ios", "android", "web"]
+  }
+}
