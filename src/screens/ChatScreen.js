@@ -99,11 +99,12 @@ const ChatScreen = () => {
       addMessage(aiResponse);
     } catch (error) {
       console.error('Error sending message:', error);
-      // Use intelligent fallback based on safety intent
+      // Use intelligent fallback based on safety intent with context
       const safetyAnalysis = detectSafetyIntent(inputText.trim());
       const fallbackMessage = getFallbackResponse(
         safetyAnalysis.isEmergency, 
-        safetyAnalysis.isSafetyConcern
+        safetyAnalysis.isSafetyConcern,
+        { userMood: 'neutral' } // Basic context for fallback
       );
       addMessage(fallbackMessage);
     } finally {
@@ -216,15 +217,15 @@ const ChatScreen = () => {
             outlineColor="#e0e0e0"
             activeOutlineColor="#2c5aa0"
           />
-          <Button
-            mode="contained"
+          <IconButton
+            icon="arrow-up"
+            size={24}
             onPress={handleSendMessage}
             disabled={!inputText.trim() || isLoading}
+            iconColor="#fff"
+            containerColor={inputText.trim() ? theme.colors.durgaRed : "#ccc"}
             style={styles.sendButton}
-            contentStyle={styles.sendButtonContent}
-          >
-            Send
-          </Button>
+          />
         </View>
         
         <Divider style={styles.divider} />
@@ -324,12 +325,15 @@ const styles = StyleSheet.create({
     borderRadius: theme.durga.borderRadius,
   },
   sendButton: {
-    borderRadius: theme.durga.borderRadius,
-    backgroundColor: theme.colors.durgaRed,
-  },
-  sendButtonContent: {
-    paddingHorizontal: theme.durga.spacing.md,
-    paddingVertical: theme.durga.spacing.sm,
+    borderRadius: 20,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   divider: {
     marginVertical: theme.durga.spacing.sm,
