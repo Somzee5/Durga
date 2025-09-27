@@ -121,13 +121,62 @@ const OfflineSafetyGuide = () => {
         title="Quick Escape Strategies"
         subtitle="Short, effective actions to disengage"
         items={[
-          'Hold your phone as if on a call; say loudly “I see you, I’m here near the CCTV”.',
-          'Use the Fake Call feature in the app to exit uncomfortable interactions.',
+          'Hold your phone as if on a call; say loudly "I see you, I\'m here near the CCTV".',
+          'Use the app\'s Long Press Fake Call feature (press header for 2 seconds) to exit uncomfortable interactions.',
           'Walk with purpose; avoid arguing. Head to the nearest open shop or guard.',
           'If you fall, keep your feet toward the person to defend distance and push away.',
           'Carry a small whistle or alarm if available; use it to draw attention.',
         ]}
       />
+
+      <Card style={styles.featuresCard}>
+        <Card.Title 
+          title="🚨 App's Unique Safety Features" 
+          titleStyle={styles.featuresTitle}
+          subtitle="Quick access emergency tools built into this app"
+        />
+        <Card.Content>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>📞</Text>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Emergency Call Button</Text>
+              <Text style={styles.featureDescription}>
+                Red floating button on the right side - instantly dials emergency services (100/112)
+              </Text>
+            </View>
+          </View>
+          
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>👆</Text>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>3-Tap SOS Activation</Text>
+              <Text style={styles.featureDescription}>
+                Tap the header 3 times quickly to activate SOS - automatically records audio, gets location, and sends emergency alert via WhatsApp
+              </Text>
+            </View>
+          </View>
+          
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>🤳</Text>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Long Press Fake Call</Text>
+              <Text style={styles.featureDescription}>
+                Long press anywhere on the header for 2 seconds to generate a realistic fake incoming call - perfect for escaping uncomfortable situations
+              </Text>
+            </View>
+          </View>
+          
+          <View style={styles.featureItem}>
+            <Text style={styles.featureIcon}>🎵</Text>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>SOS Audio Playback</Text>
+              <Text style={styles.featureDescription}>
+                All SOS recordings are saved locally - access them anytime to review evidence or share with authorities
+              </Text>
+            </View>
+          </View>
+        </Card.Content>
+      </Card>
 
       <Card style={styles.contactsCard}>
         <Card.Title title="Essential Emergency Numbers (India)" titleStyle={styles.contactsTitle} />
@@ -286,6 +335,47 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.durgaLight,
+  },
+  featuresCard: {
+    marginTop: theme.durga.spacing.md,
+    borderRadius: theme.durga.borderRadius,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 2,
+    borderColor: theme.colors.durgaRed,
+    ...theme.durga.shadow,
+  },
+  featuresTitle: {
+    color: theme.colors.durgaRed,
+    fontWeight: '800',
+    fontSize: 18,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: theme.durga.spacing.md,
+    paddingVertical: theme.durga.spacing.sm,
+    paddingHorizontal: theme.durga.spacing.sm,
+    backgroundColor: theme.colors.durgaLight,
+    borderRadius: theme.durga.borderRadius,
+  },
+  featureIcon: {
+    fontSize: 24,
+    marginRight: theme.durga.spacing.sm,
+    marginTop: 2,
+  },
+  featureContent: {
+    flex: 1,
+  },
+  featureTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: theme.colors.durgaBrown,
+    marginBottom: 4,
+  },
+  featureDescription: {
+    fontSize: 14,
+    color: theme.colors.durgaBrown,
+    lineHeight: 20,
   },
   footerNoteBox: {
     alignItems: 'center',
