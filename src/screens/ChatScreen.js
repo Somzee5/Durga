@@ -9,6 +9,7 @@ import {
   Animated,
   Linking,
   PanResponder,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Text,
@@ -22,12 +23,14 @@ import {
 } from 'react-native-paper';
 import { useChat } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { sendMessageToAI, getFallbackResponse, detectSafetyIntent } from '../services/aiService';
 import MessageBubble from '../components/MessageBubble';
 import DurgaHeader from '../components/DurgaHeader';
 import SendLocationButton from '../components/SendLocationButton';
 import SOSStatus from '../components/SOSStatus';
 import FakeCallModal from '../components/FakeCallModal';
+import LanguageSelector from '../components/LanguageSelector';
 import useTriplePressRecorder from '../hooks/useTriplePressRecorder';
 import { theme } from '../theme/theme';
 // Shake trigger temporarily disabled to avoid runtime import issues
@@ -36,8 +39,10 @@ import { theme } from '../theme/theme';
 const ChatScreen = () => {
   const [inputText, setInputText] = useState('');
   const [showFakeCall, setShowFakeCall] = useState(false);
+  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
   const { messages, isLoading, addMessage, setLoading } = useChat();
   const { logout, user } = useAuth();
+  const { selectedLanguage, t, getCurrentLanguage } = useLanguage();
   const scrollViewRef = useRef(null);
   
   // SOS functionality
@@ -150,7 +155,7 @@ const ChatScreen = () => {
     setLoading(true);
 
     try {
-      const aiResponse = await sendMessageToAI(inputText.trim(), messages);
+      const aiResponse = await sendMessageToAI(inputText.trim(), messages, selectedLanguage);
       addMessage(aiResponse);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -159,7 +164,8 @@ const ChatScreen = () => {
       const fallbackMessage = getFallbackResponse(
         safetyAnalysis.isEmergency, 
         safetyAnalysis.isSafetyConcern,
-        { userMood: 'neutral' } // Basic context for fallback
+        { userMood: 'neutral' }, // Basic context for fallback
+        selectedLanguage
       );
       addMessage(fallbackMessage);
     } finally {
@@ -249,10 +255,10 @@ const ChatScreen = () => {
         ) : (
           <View style={styles.welcomeContainer}>
             <Text style={styles.welcomeText}>
-              Welcome to the Safety Companion
+              {t('welcome')}
             </Text>
             <Text style={styles.welcomeSubtext}>
-              Start a conversation to receive helpful safety guidance and support
+              {t('welcomeSubtext')}
             </Text>
           </View>
         )}
@@ -260,16 +266,27 @@ const ChatScreen = () => {
         {isLoading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="small" color={theme.colors.durgaRed} />
-            <Text style={styles.loadingText}>Generating response...</Text>
+            <Text style={styles.loadingText}>{t('generatingResponse')}</Text>
           </View>
         )}
       </ScrollView>
 
       <Surface style={styles.inputContainer} elevation={2}>
+        {/* Language Selector Button */}
+        <View style={styles.languageButtonContainer}>
+          <TouchableOpacity
+            style={styles.languageButton}
+            onPress={() => setShowLanguageSelector(true)}
+          >
+            <Text style={styles.languageFlag}>{getCurrentLanguage().flag}</Text>
+            <Text style={styles.languageCode}>{getCurrentLanguage().code.toUpperCase()}</Text>
+          </TouchableOpacity>
+        </View>
+        
         <View style={styles.inputRow}>
           <TextInput
             style={styles.textInput}
-            placeholder="Type your message here..."
+            placeholder={t('placeholder')}
             value={inputText}
             onChangeText={setInputText}
             multiline
@@ -294,7 +311,7 @@ const ChatScreen = () => {
         
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>
-            If you're in immediate danger, call emergency services
+            {t('emergencyText')}
           </Text>
         </View>
       </Surface>
@@ -318,6 +335,12 @@ const ChatScreen = () => {
 
       {/* Fake Call Modal */}
       <FakeCallModal visible={showFakeCall} onDismiss={handleFakeCallDismiss} />
+      
+      {/* Language Selector Modal */}
+      <LanguageSelector 
+        visible={showLanguageSelector} 
+        onClose={() => setShowLanguageSelector(false)} 
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -499,6 +522,30 @@ const styles = StyleSheet.create({
     color: theme.colors.durgaBrown,
     textAlign: 'center',
     fontStyle: 'italic',
+  },
+  languageButtonContainer: {
+    alignItems: 'flex-start',
+    marginBottom: theme.durga.spacing.sm,
+  },
+  languageButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    paddingHorizontal: theme.durga.spacing.sm,
+    paddingVertical: theme.durga.spacing.xs,
+    borderRadius: theme.durga.borderRadius,
+    borderWidth: 1,
+    borderColor: theme.colors.durgaLight,
+    ...theme.durga.shadow,
+  },
+  languageFlag: {
+    fontSize: 16,
+    marginRight: theme.durga.spacing.xs,
+  },
+  languageCode: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.durgaBrown,
   },
 });
 

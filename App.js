@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ChatProvider } from './src/context/ChatContext';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { LanguageProvider } from './src/context/LanguageContext';
 import ChatScreen from './src/screens/ChatScreen';
 import OfflineSafetyGuide from './src/screens/OfflineSafetyGuide';
 import * as Network from 'expo-network';
@@ -83,11 +84,13 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
-        <AuthProvider>
-          <ChatProvider>
-            <AppNavigator />
-          </ChatProvider>
-        </AuthProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <ChatProvider>
+              <AppNavigator />
+            </ChatProvider>
+          </AuthProvider>
+        </LanguageProvider>
       </PaperProvider>
     </SafeAreaProvider>
   );
