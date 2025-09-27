@@ -8,6 +8,7 @@ import {
   Alert,
   Animated,
   Linking,
+  PanResponder,
 } from 'react-native';
 import {
   Text,
@@ -26,6 +27,7 @@ import MessageBubble from '../components/MessageBubble';
 import DurgaHeader from '../components/DurgaHeader';
 import SendLocationButton from '../components/SendLocationButton';
 import SOSStatus from '../components/SOSStatus';
+import FakeCallModal from '../components/FakeCallModal';
 import useTriplePressRecorder from '../hooks/useTriplePressRecorder';
 import { theme } from '../theme/theme';
 // Shake trigger temporarily disabled to avoid runtime import issues
@@ -33,6 +35,7 @@ import { theme } from '../theme/theme';
 
 const ChatScreen = () => {
   const [inputText, setInputText] = useState('');
+  const [showFakeCall, setShowFakeCall] = useState(false);
   const { messages, isLoading, addMessage, setLoading } = useChat();
   const { logout, user } = useAuth();
   const scrollViewRef = useRef(null);
@@ -40,6 +43,8 @@ const ChatScreen = () => {
   // SOS functionality
   const { isRecording, isSOSActive, activateSOS, openAccessibilitySettings } = useTriplePressRecorder();
   const tapMetaRef = useRef({ count: 0, lastTs: 0 });
+  const longPressTimerRef = useRef(null);
+  const longPressStartRef = useRef(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -101,6 +106,33 @@ const ChatScreen = () => {
       activateSOS();
     }
   };
+
+  // Long press gesture for fake call
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: () => false,
+    onPanResponderGrant: (evt) => {
+      longPressStartRef.current = Date.now();
+      longPressTimerRef.current = setTimeout(() => {
+        setShowFakeCall(true);
+        console.log('Fake call activated via long press');
+      }, 2000); // 2 second long press
+    },
+    onPanResponderRelease: () => {
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current);
+        longPressTimerRef.current = null;
+      }
+      longPressStartRef.current = null;
+    },
+    onPanResponderTerminate: () => {
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current);
+        longPressTimerRef.current = null;
+      }
+      longPressStartRef.current = null;
+    },
+  });
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return;
@@ -174,12 +206,16 @@ const ChatScreen = () => {
     );
   };
 
+  const handleFakeCallDismiss = () => {
+    setShowFakeCall(false);
+  };
+
   return (
     <KeyboardAvoidingView 
       style={styles.container} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <View onTouchEnd={handleHeaderTripleTap}>
+      <View onTouchEnd={handleHeaderTripleTap} {...panResponder.panHandlers}>
         <DurgaHeader onLogout={handleLogout} />
       </View>
       
@@ -279,6 +315,9 @@ const ChatScreen = () => {
           />
         </Animated.View>
       </View>
+
+      {/* Fake Call Modal */}
+      <FakeCallModal visible={showFakeCall} onDismiss={handleFakeCallDismiss} />
     </KeyboardAvoidingView>
   );
 };
