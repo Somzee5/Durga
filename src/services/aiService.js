@@ -426,7 +426,7 @@ export const getFallbackResponse = (isEmergency, isSafetyConcern, context = {}, 
   if (isEmergency) {
     const emergencyTemplates = {
       en: [
-        `🚨 I'm here with you right now! I can sense your distress and I want to help immediately.
+      `🚨 I'm here with you right now! I can sense your distress and I want to help immediately.
 
 URGENT STEPS TO TAKE:
 • Call 100 (Police) or 112 (National Emergency) right now
@@ -437,8 +437,8 @@ URGENT STEPS TO TAKE:
 You're not alone in this. Help is available and you have the strength to get through this. 
 
 Should I help you contact emergency services? (Yes/No)`,
-        
-        `🛡️ Your safety is my priority right now. I'm here to protect and guide you through this.
+      
+      `🛡️ Your safety is my priority right now. I'm here to protect and guide you through this.
 
 IMMEDIATE ACTIONS:
 • Get to a safe, public location with people around
@@ -516,7 +516,7 @@ Do you want me to help you contact someone for help? (Yes/No)`
   if (isSafetyConcern) {
     const safetyTemplates = {
       en: [
-        `I understand your concern and I'm here to support you. Your safety matters deeply to me.
+      `I understand your concern and I'm here to support you. Your safety matters deeply to me.
 
 PRACTICAL SAFETY MEASURES:
 • Stay aware of your surroundings and trust your instincts
@@ -528,8 +528,8 @@ PRACTICAL SAFETY MEASURES:
 You're taking the right steps by thinking about your safety. That's being smart and proactive.
 
 Would you like to discuss specific safety strategies or talk about what's making you feel concerned?`,
-        
-        `Your concern is completely valid, and I want you to know that I'm here to help you feel safer.
+      
+      `Your concern is completely valid, and I want you to know that I'm here to help you feel safer.
 
 SAFETY STRATEGIES:
 • Always let someone know where you're going and when you'll be back
@@ -612,8 +612,8 @@ What specific situation is making you feel concerned? I'd like to help you work 
   // General fallback responses with mood adaptation
   const generalTemplates = {
     en: {
-      neutral: [
-        `Hello! I'm experiencing some technical difficulties, but I'm still here to support you. 
+    neutral: [
+      `Hello! I'm experiencing some technical difficulties, but I'm still here to support you. 
 
 If you need immediate help or feel unsafe:
 • Call emergency services: 100 or 112
@@ -621,8 +621,8 @@ If you need immediate help or feel unsafe:
 • Move to a safe location
 
 I'm working to get back to full capacity, but your safety is always my priority. How can I help you right now?`,
-        
-        `Hi there! While I'm having some connectivity issues, I want you to know I'm still here for you.
+      
+      `Hi there! While I'm having some connectivity issues, I want you to know I'm still here for you.
 
 For any safety concerns:
 • Emergency services: 100 (Police) or 112 (National Emergency)
@@ -630,9 +630,9 @@ For any safety concerns:
 • Your safety and well-being are important
 
 What's on your mind today? I'm here to listen and help however I can.`
-      ],
-      grateful: [
-        `I'm so glad I could help you! Even though I'm having some technical issues, I'm still here to support you.
+    ],
+    grateful: [
+      `I'm so glad I could help you! Even though I'm having some technical issues, I'm still here to support you.
 
 Remember, you can always reach out if you need help:
 • Emergency services: 100 or 112
@@ -640,9 +640,9 @@ Remember, you can always reach out if you need help:
 • Your safety is always the priority
 
 Thank you for trusting me. How else can I support you today?`
-      ],
-      sad: [
-        `I can sense you might be going through a difficult time, and I want you to know I'm here for you.
+    ],
+    sad: [
+      `I can sense you might be going through a difficult time, and I want you to know I'm here for you.
 
 If you're feeling overwhelmed or unsafe:
 • Emergency services: 100 or 112
@@ -650,9 +650,9 @@ If you're feeling overwhelmed or unsafe:
 • Consider talking to a mental health professional
 
 You don't have to face this alone. I'm here to listen and support you. What's weighing on your mind?`
-      ],
-      anxious: [
-        `I understand you might be feeling anxious, and that's completely okay. I'm here to help you through this.
+    ],
+    anxious: [
+      `I understand you might be feeling anxious, and that's completely okay. I'm here to help you through this.
 
 For immediate support:
 • Emergency services: 100 or 112 if you feel in danger
@@ -660,7 +660,7 @@ For immediate support:
 • Reach out to someone you trust
 
 Your feelings are valid, and you're not alone. What's making you feel anxious? I'd like to help.`
-      ]
+    ]
     },
     hi: {
       neutral: [
